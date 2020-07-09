@@ -1,20 +1,20 @@
-let gulp = require('gulp'),
-    sass = require('gulp-sass'),
-    browserSync = require('browser-sync'),
-    uglify = require('gulp-uglify'),
-    concat = require('gulp-concat'),
-    rename = require('gulp-rename'),
-    del = require('del'),
-    autoprefixer = require('gulp-autoprefixer');
+import gulp from 'gulp';
+import sass from 'gulp-sass';
+import browserSync from 'browser-sync';
+import uglify from 'gulp-uglify';
+import concat from 'gulp-concat';
+import rename from 'gulp-rename';
+import del from 'del';
+import autoprefixer from 'gulp-autoprefixer';
 
 
-gulp.task('clean', async () => {
+export const clean = async () => {
     del.sync('dist')
-});
+};
 
 // SCSS
 
-gulp.task('scss', () => {
+export const scss = () => {
 
     return gulp.src('app/scss/**/*.scss')
 
@@ -26,39 +26,38 @@ gulp.task('scss', () => {
         .pipe(rename({ suffix: '.min' }))
         .pipe(gulp.dest('app/css'))
         .pipe(browserSync.reload({ stream: true }))
-});
+};
 
 // CSS
 
-gulp.task('css', () => {
+export const css = () => {
     return gulp.src([
         'node_modules/normalize.css/normalize.css',
         'node_modules/slick-carousel/slick/slick.css',
-
-
     ])
         .pipe(concat('_libs.scss'))
         .pipe(gulp.dest('app/scss'))
         .pipe(browserSync.reload({ stream: true }))
-});
+};
 
 
 // HTML
 
-gulp.task('html', () => {
+export const html = () => {
     return gulp.src('app/*.html')
         .pipe(browserSync.reload({ stream: true }))
-})
+};
 
 // Script
 
-gulp.task('script', () => {
+export const script = () => {
     return gulp.src('app/js/*.js')
         .pipe(browserSync.reload({ stream: true }))
-})
+
+};
 // JavaScript
 
-gulp.task('js', () => {
+export const js = () => {
     return gulp.src([
         'node_modules/slick-carousel/slick/slick.js',
 
@@ -68,11 +67,11 @@ gulp.task('js', () => {
         .pipe(gulp.dest('app/js'))
         .pipe(browserSync.reload({ stream: true }))
 
-})
+};
 
 // EXPORT
 
-gulp.task('export', () => {
+export const exp = async () => {
     let buildHtml = gulp.src('app/**/*.html')
         .pipe(gulp.dest('dist'));
 
@@ -80,6 +79,7 @@ gulp.task('export', () => {
         .pipe(gulp.dest('dist/css'));
 
     let buildJs = gulp.src('app/js/**/*.js')
+
         .pipe(gulp.dest('dist/js'));
 
     let buildFonts = gulp.src('app/fonts/**/*.*')
@@ -87,26 +87,25 @@ gulp.task('export', () => {
 
     let buildImg = gulp.src('app/img/**/*.*')
         .pipe(gulp.dest('dist/img'));
-})
+}
 
 
 //watcher
 
-gulp.task('watch', () => {
+export const watch = () => {
     gulp.watch('app/scss/**/*.scss', gulp.parallel('scss'));
     gulp.watch('app/*.html', gulp.parallel('html'));
     gulp.watch('app/js/*.js', gulp.parallel('script'));
-});
+};
 
 // browser-sync
-
-gulp.task('browser-sync', () => {
+export const browser = () => {
     browserSync.init({
         server: {
             baseDir: "app/"
         }
     });
-});
+};
 
-gulp.task('build', gulp.series('clean', 'export'))
-gulp.task('default', gulp.parallel('css', 'scss', 'js', 'browser-sync', 'watch'))
+gulp.task('build', gulp.series(clean, exp))
+gulp.task('default', gulp.parallel(css, scss, js, browser, watch))

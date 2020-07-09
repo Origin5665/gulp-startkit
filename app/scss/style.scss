@@ -7,3 +7,28 @@
 // Media =>
 
 @import 'media';
+
+
+
+.title {
+    color: $color
+}
+
+.page {
+    width: 1360px;
+    margin: 0 auto;
+}
+
+.container {
+    width: 500px;
+    margin: 0 auto;
+}
+
+.slick-slider {
+    border: 1px solid gray;
+}
+
+.img {
+    width: 500px;
+
+}
